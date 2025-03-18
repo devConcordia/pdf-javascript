@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+
+		<script type="module" >
+		
+		import { PDF, PDFPage, PDFAction, PDFStream, PDFFont } from "../source/index.mjs"
+		
+		window.addEventListener('load', function() {
+
+			var doc = PDF.Create();
+			
+		//	var font1 = new PDFFont( /* 'Helvetica' */ ); /// Default
+			var font2 = new PDFFont( 'Helvetica-Bold' );
+			var font3 = new PDFFont( 'Helvetica-Oblique' );
+			var font4 = new PDFFont( 'Helvetica-BoldOblique' );
+		//	var font5 = new PDFFont( 'Times-Roman' );
+			var font6 = new PDFFont( 'Times-Bold' );
+			var font7 = new PDFFont( 'Times-Italic' );
+			var font8 = new PDFFont( 'Times-BoldItalic' );
+		//	var font9 = new PDFFont( 'Courier' );
+			var font10 = new PDFFont( 'Courier-Bold' );
+			var font11 = new PDFFont( 'Courier-Oblique' );
+			var font12 = new PDFFont( 'Courier-BoldOblique' );
+			var font13 = new PDFFont( 'Symbol' );
+			
+			var impact = new PDFFont('Impact');
+			var Verdana = new PDFFont('Verdana');
+			
+			var page = new PDFPage();
+				page.use( PDF.Fonts.HELVETICA, PDF.Fonts.TIMES, PDF.Fonts.COURIER,
+						  font2, font3, font4,
+						  font6, font7, font8, 
+						  font10, font11, font12, 
+						  font13, impact, Verdana );
+			
+				
+			var fontSize = 8;
+			
+			var content = new PDF.Path2D();
+				content.scale( PDF.MM, PDF.MM );
+				content.fillText( 'Verdana',		 		20, 280, fontSize, Verdana );
+				content.fillText( 'Helvetica',		 		20, 260, fontSize, PDF.Fonts.HELVETICA );
+				content.fillText( 'Helvetica-Bold', 		20, 240, fontSize, font2 );
+				content.fillText( 'Helvetica-Oblique', 	    20, 220, fontSize, font3 );
+				content.fillText( 'Helvetica-BoldOblique',  20, 200, fontSize, font4 );
+				
+				content.fillText( 'Times-Roman', 			20, 180, fontSize, PDF.Fonts.TIMES );
+				content.fillText( 'Times-Bold', 			20, 160, fontSize, font6 );
+				content.fillText( 'Times-Italic', 			20, 140, fontSize, font7 );
+				content.fillText( 'Times-BoldItalic', 		20, 120, fontSize, font8 );
+				
+				content.fillText( 'Courier', 				20, 100, fontSize, PDF.Fonts.COURIER );
+				content.fillText( 'Courier-Bold', 			20, 80, fontSize, font10 );
+				content.fillText( 'Courier-Oblique',		20, 60, fontSize, font11 );
+				content.fillText( 'Courier-BoldOblique', 	20, 40, fontSize, font12 );
+				
+				content.fillText( 'Symbol', 				20, 20, fontSize, font13 );
+				
+				
+				content.fillText( 'Text Tr: 0', 120, 260, fontSize, impact, { Tr: 0, Tc: -1.10 });
+				content.fillText( 'Text Tr: 1', 120, 240, fontSize, impact, { Tr: 1, Tc: -1.10 });
+				content.fillText( 'Text Tr: 2', 120, 220, fontSize, impact, { Tr: 2, Tc: -1.10 });
+				content.fillText( 'Text Tr: 3', 120, 200, fontSize, impact, { Tr: 3, Tc: -1.10 });
+				content.fillText( 'Text Tr: 4', 120, 180, fontSize, impact, { Tr: 4, Tc: -1.10 });
+				content.fillText( 'Text Tr: 5', 120, 160, fontSize, impact, { Tr: 5, Tc: -1.10 });
+				content.fillText( 'Text Tr: 6', 120, 140, fontSize, impact, { Tr: 6, Tc: -1.10 });
+				content.fillText( 'Text Tr: 7', 120, 120, fontSize, impact, { Tr: 7, Tc: -1.10 });
+				
+			page.append( new PDFStream( content ) );
+			
+			
+			doc.attach( page );
+			
+			doc.preview( document.body, innerWidth, innerHeight );
+		//	doc.open();
+		//	doc.download();
+			
+		}, false);
+		
+		
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>

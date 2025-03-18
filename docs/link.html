@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+
+		<script type="module" >
+		
+		import { PDF, PDFPage, PDFAction, PDFAnnot, PDFStream } from "../source/index.mjs"
+			
+		window.addEventListener('load', function() {
+
+			var doc = PDF.Create();
+			
+			var action = new PDFAction( 'http://github.com/devConcordia', PDFAction.URI );
+	
+			var annot = new PDFAnnot( action, PDFAnnot.LINK, 50, 50, 100, 100 );
+			
+			var page = new PDFPage();
+			
+			var content = new PDF.Path2D();
+			//	content.scale( PDF.MM, PDF.MM )
+				content.rect( 50, 50, 100, 100 ).fill();
+	
+			page.append( new PDFStream( content ), annot );
+	
+			
+			doc.attach( page );
+			
+			doc.preview( document.body, innerWidth, innerHeight );
+
+		}, false);
+		
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>

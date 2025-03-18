@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<script type="module" >
+		
+		import { PDF, PDFPage, PDFStream } from "../source/index.mjs"
+		
+		window.addEventListener('DOMContentLoaded', function() {
+			'use strict'
+			
+			window.addEventListener('load', function() {
+
+				var content = new PDF.Path2D();
+				
+			//	content.scale( PDF.MM, PDF.MM );
+				
+				content.fillText( "RGB", 23, 210, 6, PDF.Fonts.HELVETICA );
+				content.fillText( "CMYK", 46, 210, 6, PDF.Fonts.HELVETICA );
+				
+				content.fillColor( new PDF.Color( 0xff0000 ) ).rect( 20, 20, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x00ff00 ) ).rect( 20, 40, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x0000ff ) ).rect( 20, 60, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xffff00 ) ).rect( 20, 80, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x00ffff ) ).rect( 20, 100, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xff00ff ) ).rect( 20, 120, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xffffff ) ).rect( 20, 140, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x999999 ) ).rect( 20, 160, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x000000 ) ).rect( 20, 180, 20, 20 ).fill();
+				
+				content.fillColor( new PDF.Color( 0xff0000 ).cmyk ).rect( 45, 20, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x00ff00 ).cmyk ).rect( 45, 40, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x0000ff ).cmyk ).rect( 45, 60, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xffff00 ).cmyk ).rect( 45, 80, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x00ffff ).cmyk ).rect( 45, 100, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xff00ff ).cmyk ).rect( 45, 120, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0xffffff ).cmyk ).rect( 45, 140, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x999999 ).cmyk ).rect( 45, 160, 20, 20 ).fill();
+				content.fillColor( new PDF.Color( 0x000000 ).cmyk ).rect( 45, 180, 20, 20 ).fill();
+				
+				
+				
+				
+				var page = new PDFPage();
+					page.use( PDF.Fonts.HELVETICA );
+				
+				var stream = new PDFStream( content );
+				
+				page.append( stream );
+				
+				var doc = PDF.Create();
+				
+				doc.attach( page );
+				
+				doc.preview( document.body, innerWidth, innerHeight );
+				
+				console.log( doc );
+				
+			//	doc.open();
+			//	doc.download();
+				
+			//	document.write( '<pre>'+ doc.toString() +'</pre>' )
+				
+			}, false);
+			
+		}, false);
+		
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>

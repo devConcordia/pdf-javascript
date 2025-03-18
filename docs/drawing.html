@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<script type="module" >
+		import { PDF, PDFPage, PDFStream } from "../source/index.mjs"
+		
+		window.addEventListener('load', function() {
+
+			var data = Star( 20, 0, 0, 0 );
+			
+			var doc = PDF.Create();
+			
+			var page = new PDFPage();
+				page.use( PDF.Fonts.COURIER );
+				
+			var content = new PDF.Path2D();
+				
+			//	content.scale( PDF.MM, PDF.MM );
+				
+				/// Fill
+				content.save();
+				content.translate( 65, 255 );
+				content.fillColor( new PDF.Color( 0x000000 ) );
+				content.polygon( data ).fill();
+				content.restore();
+				
+				content.save();
+				content.translate( 140, 255 );
+				content.fillColor( new PDF.Color( 0xff0000 ) );
+				content.polygon( data ).fill( true ); /// fill( even-odd )
+				content.restore();
+				
+				/// Stroke
+				content.save();
+				content.translate( 65, 195 );
+				content.strokeColor( new PDF.Color( 0x0000ff ) );
+				content.polygon( data ).stroke();
+				content.restore();
+				
+				content.save();
+				content.translate( 140, 195 );
+				content.strokeColor( new PDF.Color( 0xff0000 ) );
+				content.polygon( data ).stroke( true );
+				content.restore();
+				
+				/// both
+				content.save();
+				content.translate( 65, 135 );
+				content.strokeColor( new PDF.Color( 0x000000 ) );
+				content.fillColor( new PDF.Color( 0x00ffff ) );
+				content.polygon( data ).both();
+				content.restore();
+				
+				content.save();
+				content.translate( 140, 135 );
+				content.strokeColor( new PDF.Color( 0x000000 ) );
+				content.fillColor( new PDF.Color( 0x00ffff ) );
+				content.polygon( data ).both( true );
+				content.restore();
+				
+				content.save();
+				content.translate( 65, 75 );
+				content.strokeColor( new PDF.Color( 0xff0000 ) );
+				content.fillColor( new PDF.Color( 0x000000 ) );
+				content.polygon( data ).both( false, true );
+				content.restore();
+				
+				content.save();
+				content.translate( 140, 75 );
+				content.strokeColor( new PDF.Color( 0xff0000 ) );
+				content.fillColor( new PDF.Color( 0x000000 ));
+				content.polygon( data ).both( true, true );
+				content.restore();
+				
+				
+				var fsize = 4;
+				
+				content.fillColor( new PDF.Color( 0x000000 ) );
+				
+				/// fill
+				content.fillText( '.fill()', 55, 230, fsize, PDF.Fonts.COURIER );
+				content.fillText( '.fill( true )', 125, 230, fsize, PDF.Fonts.COURIER );
+			
+				/// stroke
+				content.fillText( '.stroke()', 55, 170, fsize, PDF.Fonts.COURIER );
+				content.fillText( '.stroke( true )', 125, 170, fsize, PDF.Fonts.COURIER );
+				
+				/// both
+				content.fillText( '.both()', 55, 110, fsize, PDF.Fonts.COURIER );
+				content.fillText( '.both( true )', 125, 110, fsize, PDF.Fonts.COURIER );
+				
+				content.fillText( '.both( false, true )', 40, 50, fsize, PDF.Fonts.COURIER );
+				content.fillText( '.both( true, true )', 120, 50, fsize, PDF.Fonts.COURIER );
+			
+				
+			page.append( new PDFStream( content ) );
+			
+			doc.attach( page );
+			
+			doc.preview( document.body, innerWidth, innerHeight );
+		//	doc.open();
+		//	doc.download();
+			
+			console.log( doc );
+			
+		}, false);
+		
+		/** Star
+		 *
+		 *	@return {Array}
+		 */
+		function Star( radius, px = 0, py = 0, rotate = 0 ) {
+			
+			var nodes = new Array();
+			
+			var setp = 2*Math.PI / 5;
+			
+			rotate *= 180/Math.PI;
+			
+			for( var i = 0; i < 5; i++ ) {
+					
+				var angle = rotate + setp * i * 2;
+				
+				var x = px + Math.sin( angle ) * radius,
+					y = py + Math.cos( angle ) * radius;
+				
+				nodes.push([ x, y ]);
+				
+			}
+			
+			return nodes
+			
+		};
+		
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+		<script type="module" >
+		
+		import { PDF, PDFPage, PDFAction, PDFStream } from "../source/index.mjs"
+			
+		window.addEventListener('load', function() {
+
+			var doc = PDF.Create();
+			
+			var action = new PDFAction( "app.alert('Action')", PDFAction.JS );
+				
+			doc.trailer.Root.OpenAction = action;
+			
+			var page = new PDFPage();
+				
+			doc.attach( page, action );
+			
+			doc.preview( document.body, innerWidth, innerHeight );
+		//	doc.open();
+		//	doc.download();
+		
+		}, false);
+			
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>

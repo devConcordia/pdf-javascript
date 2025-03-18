@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8' />
+
+		<script type="module" >
+		
+		import { PDF, PDFPage, PDFImage, PDFStream } from "../source/index.mjs"
+		
+		window.addEventListener('load', function() {
+			
+			var img = new Image();
+			
+			img.onload = function() {
+			
+				var doc = PDF.Create();
+				
+				var image = PDFImage.From( img );
+				
+				var page = new PDFPage();
+					page.use( image );
+					
+				var content = new PDF.Path2D();
+					content.drawImage( image, 50, 50, 50, 50, 0 );
+					
+					content.save();
+					content.translate( 125, 100 );
+					content.drawImage( image, 0, 0, 50, 50, Math.PI/2 );
+					content.restore()
+		
+				page.append( new PDFStream( content ) );
+		
+				
+				doc.attach( page );
+				
+				doc.preview( document.body, innerWidth, innerHeight );
+			//	doc.open();
+			//	doc.download();
+				
+			};
+			
+			img.src = 'imageSample.jpg';
+		
+		}, false);
+			
+		</script>
+		
+		<style> 
+			* { padding:0; margin:0; } 
+			iframe { position: absolute; margin:auto; left:0; top:0; bottom:0; right:0; }
+		</style>
+		
+	</head>
+	<body>
+	</body>
+</html>
