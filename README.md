@@ -1,8 +1,8 @@
 # pdf-javascript
 
-Esse manipulador de arquivos PDF surgiu da necessidade de gerar arquivos que seriam interpretados por um ploter.
+Esse manipulador de arquivos PDF surgiu da necessidade de gerar arquivos que seriam interpretados por um plotter.
 
-Como foi desenvolvido para operar na web, falta implementar alguns recursos para funcionar no Node.JS.
+Como foi desenvolvido para operar na web, falta implementar alguns recursos para funcionar com Node.JS.
 
 **Referencias**
 - [PDF32000_2008.pdf](https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf)
