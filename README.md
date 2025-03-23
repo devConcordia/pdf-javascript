@@ -1,29 +1,27 @@
 # pdf-javascript
 
-Esse manipulador de arquivos PDF surgiu da necessidade de gerar arquivos que seriam interpretados por um plotter.
+This project arose from the need to generate PDF files for production on a plotter.
+As it was developed to run in a web browser, some features still need to be implemented to work with Node.js.
 
-Como foi desenvolvido para operar na web, falta implementar alguns recursos para funcionar com Node.JS.
-
-**Referencias**
+**References**
 - [PDF32000_2008.pdf](https://opensource.adobe.com/dc-acrobat-sdk-docs/pdfstandards/PDF32000_2008.pdf)
 
+## Basic usage
 
-## Uso basico
-
-Nesse exemplo é gerado um arquivo PDF com o "Hello World!" no canto inferior esquerdo da página.
+In this example, a PDF file is generated with the message "Hello World!" in the bottom left corner of the page.
 
 ```javascript
 
-/// importa os recursos utilizados
+/// importing ...
 import { PDF, PDFPage, PDFStream } from "../source/index.mjs"
 
-/// cria um novo PDFDocumento
+/// create a document
 let doc = PDF.Create();
 
-/// Inicia a pagina e indica
+/// create a page
 let page = new PDFPage();
 
-/// indica o uso da fonte pela pagina
+/// indicate a font type used by the page
     page.use( PDF.Fonts.COURIER );
 
 
@@ -32,41 +30,40 @@ let fontSize = 4;
 let px = 20;
 let py = 20;
 
-/// inicia um contexto de renderização Path2D
+/// init a 2d renderer
 let content = new PDF.Path2D();
 
-/// define a cor
+/// set a fill color
 content.fillColor( new PDF.Color( 0xff0000 ) );
 
-/// escreve um hello world
+/// write "hello world"
 content.fillText( 'Hello World!', px, py, fontSize, PDF.Fonts.COURIER );
 
-/// adiciona o conteudo à pagina
+/// add content to the page
 page.append( new PDFStream( content ) );
 
-/// adiciona a pagina ao documento
+/// add page to document
 doc.attach( page );
 
 
-
-/// cria um iframe no body da pagina para vizualizar o documento
+/// display in an iframe
 doc.preview( document.body, innerWidth, innerHeight );
 
-/// para abrir um popup
+/// open a popup
 doc.open();
 
-/// para baixar o arquivo
+/// download
 doc.download();
 
 ```
 
-## Visualizar os exemplos
+## See examples
 
-Para visualizar os exemplos de [docs/](docs/), será preciso iniciar um servidor local, no exmplo a seguir utilizamos o python para iniciar um servidor simples.
-Em seguida, abra o localhost em um browser.
+To view the examples in [docs/](docs/), you need to start a local server. In the following example, we use Python to start a simple server.
+Then, open the localhost in a web browser.
 
 ```
-git clone https://github.com/devConcordia/DIP.git
+git clone https://github.com/devConcordia/pdf-javascript.git
 
 cd DIP
 
