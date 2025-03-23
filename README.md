@@ -65,7 +65,7 @@ Then, open the localhost in a web browser.
 ```
 git clone https://github.com/devConcordia/pdf-javascript.git
 
-cd DIP
+cd pdf-javascript
 
 python -m http.server
 ```
