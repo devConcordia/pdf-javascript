@@ -1,9 +1,7 @@
 
 import { SP, getUID } from "./common.mjs";
 
-/** 
- *	
- *	
+/** PDFObject
  *	
  *	@param {*} primitive	Number | Boolean | String | Array | Object
  */
