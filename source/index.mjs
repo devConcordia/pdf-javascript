@@ -18,7 +18,7 @@ import PDFXObject from "./PDFXObject.mjs"
 
 import PDFDocument from "./PDFDocument.mjs"
 
-//import CMap from "./util/CMap.mjs";
+import CMap from "./util/CMap.mjs";
 import Color from "./util/Color.mjs";
 import Path2D from "./util/Path2D.mjs";
 
@@ -34,7 +34,7 @@ class PDF {
 		COURIER: new PDFFont( 'Courier' )
 	};
 	
-	//static CMap = CMap;
+	static CMap = CMap;
 	static Color = Color;
 	static Path2D = Path2D;
 	
