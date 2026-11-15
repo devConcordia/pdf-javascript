@@ -15,42 +15,42 @@ import PDFPage from "./PDFPage.mjs"
  *	@param {Number} version
  */
 export default class PDFDocument {
-	
+
 	#name = 'pdf-document';
 	#version = '1.6';
-	
+
 	#blob = null;
 	#url = null;
-	
+
 	#cache = null;
-	
+
 	constructor( name = 'pdf-document', version = '1.6' ) {
-		
+
 		this.#name = name;
 		this.#version = version;
-		
+
 		///
 		this.trailer = new PDFTrailer();
-		
+
 	}
-	
+
 	get Pages() {
-		
+
 		if( this.trailer )
 			return this.trailer.Root.Pages;
-		
+
 		return null;
-		
+
 	}
-	
+
 	get blob() {
-		
+
 		return this.#blob || this.createBlob()
-		
+
 	}
 
 	get URL() {
-		
+
 		if( this.#url == null )
 			this.createBlob();
 
@@ -59,18 +59,18 @@ export default class PDFDocument {
 	}
 
 	updateXRef() {
-		
+
 		let i = 1;
-		
+
 		for( let key in this ) {
-			
+
 			if( key != 'trailer' )
 				this[ key ].setObjectR( i++, 0 );
-		
+
 		}
-		
+
 	}
-	
+
 	/**	attach
 	 *
 	 *	@param {PDFDictionary} arguments
@@ -78,7 +78,7 @@ export default class PDFDocument {
 	attach() {
 
 		for( let object of arguments ) {
-			
+
 			if( object instanceof PDFDictionary || object instanceof PDFArray ) {
 
 				let name = object.getObjectName();
@@ -87,7 +87,7 @@ export default class PDFDocument {
 
 				if( this[ name ] === undefined )
 					this[ name ] = object;
-				
+
 				/// procura por child objects
 				/// e attach caso não existam nesse contexto
 				attach_object( this, object );
@@ -133,11 +133,11 @@ export default class PDFDocument {
 
 			string += '#';
 
-			for( let key in data ) 
+			for( let key in data )
 				string += ((string == '')? '' : '&') + key +'='+ data[ key ];
 
 		}
-		
+
 		let iframe = document.createElement( 'iframe' );
 			iframe.src = this.URL + string;
 			iframe.width = w || parentNode.clientWidth;
@@ -180,7 +180,7 @@ export default class PDFDocument {
 			URL.revokeObjectURL( this.#url );
 
 		let blob = new Blob([ this.toBuffer() ], { type:'application/pdf' });
-		
+
 		this.#blob = blob;
 		this.#url = URL.createObjectURL( blob );
 
@@ -189,28 +189,28 @@ export default class PDFDocument {
 	}
 
 	toDataURL() {
-		
+
 		return 'data:application/pdf;base64,'+ btoa(this.toString());
-		
+
 	}
-	
+
 	/** toBuffer
-	 *	
+	 *
 	 *	@return {Uint8Array}
 	 */
 	toBuffer() {
-		
+
 		let source = this.toString(),
 			length = source.length,
 			buffer = new Uint8Array( length );
-	
+
 		for( let i = 0; i < length; i++ )
 			buffer[ i ] = source.charCodeAt( i );
-		
+
 		return buffer
-		
+
 	}
-	
+
 	/** toString
 	 *
 	 *	@return {String}
@@ -220,21 +220,18 @@ export default class PDFDocument {
 		if( force || this.#cache != null ) return this.#cache;
 
 		let output = '%PDF-' + this.#version + CRLF;
-		//	output += "%âãÏÓ" + CRLF;
-		//	output += "\u0025\u00e2\u00e3\u00cf\u00d3" + CRLF;
-		
-		
+
 		///
 		this.updateXRef();
-		
+
 		///
 		this.trailer.Size = Object.keys( this ).length + 1;
-		
+
 		for( let key in this ) {
 			if( key != 'trailer' )
 				output += this[ key ].toString() + CRLF;
 		}
-		
+
 		/// cross-reference table - xref
 		output += 'xref'+ CRLF
 				+'0'+ SP + this.trailer.Size + CRLF
@@ -243,7 +240,7 @@ export default class PDFDocument {
 		for( let key in this ) {
 
 			if( key == 'trailer' ) continue;
-				
+
 			let offset = output.indexOf( this[ key ].getObjectHeader() );
 
 			output += ( '0000000000'+ offset ).slice( -10 ) +' 00000 n'+ CRLF;
@@ -251,11 +248,11 @@ export default class PDFDocument {
 		}
 
 		output += this.trailer.toString();
-		
+
 		return output +'startxref'+ CRLF + output.indexOf( 'xref' ) + CRLF +'%%EOF';
 
 	}
-	
+
 }
 
 
@@ -300,7 +297,7 @@ function attach_object( target, object ) {
 		let value = object[ key ];
 
 		if( value instanceof PDFDictionary || value instanceof PDFArray ) {
-		
+
 			if( target[ value.getObjectName() ] === undefined ) {
 
 				target.attach( value );

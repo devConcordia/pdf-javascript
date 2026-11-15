@@ -1,51 +1,81 @@
 
 import { SP, getUID } from "./common.mjs";
 
-/** PDFObject
- *	
- *	@param {*} primitive	Number | Boolean | String | Array | Object
- */
-export default function PDFObject( primitive ) {
-	
-	return class PDFObject extends primitive {
-		
-		#name = null;
-		#objectNumber = 0;
-		#generationNumber = 0;
-	
-		constructor() {
-			
-			super( ...arguments );
-			
-			this.#name = getUID( this.constructor.name );
-			
-		}
-		
-		getObjectHeader() {
-			
-			return this.#objectNumber + SP + this.#generationNumber + SP + 'obj'
+const PDF_OBJECT = Symbol.for('PDFObject');
 
-		}
+function PDFObjectFactory(primitive) {
 
-		getObjectName() {
-			
-			return this.#name
+    return class PDFObject extends primitive {
 
-		}
-		
-		getObjectR() {
-			
-			return this.#objectNumber + SP + this.#generationNumber + SP + 'R'
+        #name = null;
+        #objectNumber = 0;
+        #generationNumber = 0;
 
-		}
-		
-		setObjectR( objectNumber, generationNumber = 0 ) {
-			
-			this.#objectNumber = objectNumber;
-			this.#generationNumber = generationNumber;
-			
-		}
-	
-	}
-	
+        get [PDF_OBJECT]() {
+            return true;
+        }
+
+        constructor(...args) {
+
+            super(...args);
+
+            this.#name = getUID(this.constructor.name);
+
+        }
+
+        getObjectHeader() {
+
+            return this.#objectNumber + SP +
+                   this.#generationNumber + SP + 'obj';
+
+        }
+
+        getObjectName() {
+
+            return this.#name;
+
+        }
+
+        getObjectR() {
+
+            return this.#objectNumber + SP +
+                   this.#generationNumber + SP + 'R';
+
+        }
+
+        setObjectR(objectNumber, generationNumber = 0) {
+
+            this.#objectNumber = objectNumber;
+            this.#generationNumber = generationNumber;
+
+        }
+
+    };
+
 }
+
+const PDFObject = new Proxy(PDFObjectFactory, {
+
+    apply(target, thisArg, args) {
+
+        return target.apply(thisArg, args);
+
+    },
+
+    get(target, property, receiver) {
+
+        if (property === Symbol.hasInstance) {
+
+            return (instance) => {
+                return instance?.[PDF_OBJECT] === true;
+            };
+
+        }
+
+        return Reflect.get(target, property, receiver);
+
+    }
+
+});
+
+export default PDFObject;

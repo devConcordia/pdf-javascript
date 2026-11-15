@@ -1,15 +1,16 @@
 
 import { SP, CRLF } from "../core/common.mjs";
+import PDFColorSpace from "../PDFColorSpace.mjs"
 
 const DEG_TO_RAD = Math.PI/180;
 
 let FLOAT_PRECISION = 4;
 
 /** precision
- *	
+ *
  */
-function precision( n ) { 
-	
+function precision( n ) {
+
 	return n.toFixed( FLOAT_PRECISION );
 
 }
@@ -19,23 +20,23 @@ function precision( n ) {
  *
  */
 export default class Path2D extends Array {
-	
-	static set PRECISION( v ) { 
-		
+
+	static set PRECISION( v ) {
+
 		PRECISION = v;
-	
+
 	}
-	
+
 	constructor() {
-		
+
 		super();
-		
+
 		this.using = new Object;
-		
+
 	}
-	
+
 	///
-	
+
 	/** save
 	 *
 	 *	@return {Path2D} this
@@ -47,7 +48,7 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** restore
 	 *
 	 *	@return {Path2D} this
@@ -59,32 +60,32 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	do( object ) {
-		
+
 		var name = object.getObjectName();
-		
+
 		this.push( '/'+ name + SP +'Do' );
 
 	}
-	
+
 	/// Matrix Transform
-	
+
 	transform( data, x, y ) {
-		
+
 		let d = '';
-		
-		for( let n of data ) 
+
+		for( let n of data )
 			d += precision( parseFloat(n) ) + SP;
-		
+
 		this.push( d + SP + precision( x ) + SP + precision( y ) + SP + 'cm' );
-		
+
 		return this;
 
 	}
-	
+
 	/** translate
-	 *	
+	 *
 	 *	@param {Number} x, y
 	 *	@return {Path2D} this
 	 */
@@ -95,12 +96,12 @@ export default class Path2D extends Array {
 	}
 
 	/** rotate
-	 *	
+	 *
 	 *	@param {Number} angle
 	 *	@return {Path2D} this
 	 */
 	rotate( angle = 0 ) {
-		
+
 		let c = Math.cos( angle ),
 			s = Math.sin( angle );
 
@@ -109,7 +110,7 @@ export default class Path2D extends Array {
 	}
 
 	/** scale
-	 *	
+	 *
 	 *	@param {Number} sx, sy
 	 *	@return {Path2D} this
 	 */
@@ -118,9 +119,9 @@ export default class Path2D extends Array {
 		return this.transform([ sx, 0, 0, sy ], 0, 0 );
 
 	}
-	
+
 	/** skew
-	 *	
+	 *
 	 *	@param {Number} ax, ay
 	 *	@return {Path2D} this
 	 */
@@ -131,9 +132,9 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/// colors
-	
+
 	/** strokeColor
 	 *
 	 *	@param {PDFColorSpace | TypedArray} color
@@ -141,14 +142,14 @@ export default class Path2D extends Array {
 	 */
 	strokeColor( color ) {
 
-		if( color.constructor.name == "PDFColorSpace" ) {
+		if( color instanceof PDFColorSpace ) {
 
 			let name = color.getObjectName();
-		
+
 			this.push( '/' + name + SP + 'CS 1.0000 SCN' );
-			
+
 			if( !(name in this.using) ) this.using[ name ] = color;
-			
+
 		} else {
 
 			switch( color.length ) {
@@ -171,7 +172,7 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** fillColor
 	 *
 	 *	@param {PDFColorSpace | Array} color
@@ -179,7 +180,7 @@ export default class Path2D extends Array {
 	 */
 	fillColor( color ) {
 
-		if( color.constructor.name == "PDFColorSpace" ) {
+		if( color instanceof PDFColorSpace ) {
 
 			var name = color.getObjectName();
 
@@ -209,9 +210,9 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** lineWidth
-	 *	
+	 *
 	 *	@param {Number} w
 	 *	@return {Path2D} this
 	 */
@@ -222,9 +223,9 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** miter
-	 *	
+	 *
 	 *	@param {Number} w
 	 *	@return {Path2D} this
 	 */
@@ -235,33 +236,33 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** lineDashPattern
-	 *	
+	 *
 	 *	@param {Array} array
 	 *	@param {Number} phase
 	 *	@return {Path2D} this
 	 */
 	lineDashPattern( data, phase = 0 ) {
-		
+
 		let d = '';
-	
-		for( let n of data ) 
+
+		for( let n of data )
 			d += precision( n ) + SP;
-		
+
 		this.push('['+ d +']'+ SP + precision( phase ) + SP +'d');
 
 		return this;
 
 	}
-	
+
 	///
-	
+
 	/** stroke
-	 *	
+	 *
 	 *	S false
 	 *	s true
-	 *	
+	 *
 	 *	@param {Boolean} closed
 	 *	@return {Path2D} this
 	 */
@@ -272,7 +273,7 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** fill
 	 *
 	 *	@param {Boolean} rule
@@ -285,7 +286,7 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** both
 	 *
 	 *	@param {Boolean} closed, rule
@@ -298,20 +299,20 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
-	/** 
-	 *	
+
+	/**
+	 *
 	 */
 	clip( rule = false ) {
-		
+
 		this.push( rule? 'W*' : 'W' );
 
 		return this;
 
 	}
-	
+
 	///
-	
+
 	/** moveTo
 	 *
 	 *	@param {Number} x, y
@@ -358,7 +359,7 @@ export default class Path2D extends Array {
 	 */
 	rect( x, y, w, h ) {
 
-		this.push( 
+		this.push(
 			precision( x ) + SP +
 			precision( y ) + SP +
 			precision( w ) + SP +
@@ -382,39 +383,39 @@ export default class Path2D extends Array {
 		return this;
 
 	}
-	
+
 	/** circle
 	 *
 	 *	@param {Number} x, y, radius, points
 	 *	@return {Path2D} this
 	 */
 	circle( px, py, radius, points = 36 ) {
-		
+
 		this.ellipse( px, py, radius, radius, points );
-		
+
 		return this;
 
 	}
-	
+
 	/** ellipse
-	 *	
+	 *
 	 *	@param {Number} x, y, rv, rh, points
 	 *	@return {Path2D} this
 	 */
 	ellipse( px, py, rh, rv = rh, points = 36 ) {
 
 		let step = Math.floor( 360 / points );
-		
+
 		this.moveTo( px + rh * Math.cos(0), py + rv * Math.sin(0) );
-		
+
 		for( let i = step; i < 360; i += step ) {
-			
+
 			let n = i * DEG_TO_RAD;
-			
+
 			this.lineTo( px + rh * Math.cos(n), py + rv * Math.sin(n) );
-		
+
 		}
-		
+
 		return this;
 
 	}
@@ -425,28 +426,28 @@ export default class Path2D extends Array {
 	 *	@return {Path2D} this
 	 */
 	polygon( input ) {
-		
+
 		this.moveTo( ...input[0] );
-		
+
 		///
 		for( let i = 1; i < input.length; i++ ) {
-			
+
 			let e = input[i];
-			
+
 			if( e.length == 2 ) {
-				
+
 				this.lineTo( ...e );
-				
+
 			} else if( e.length == 6 ) {
-				
+
 				this.curve( ...e );
-				
+
 			} else {
-				
+
 				console.warn( 'Path2D.polygon: bad data', input );
-				
+
 			}
-			
+
 		}
 
 		return this;
@@ -466,37 +467,37 @@ export default class Path2D extends Array {
 	 *	@return {Path2D} this
 	 */
 	fillText( content, x, y, size, font, options = null ) {
-		
+
 		let name = font.getObjectName();
-		
-		if( !(name in this.using) ) 
+
+		if( !(name in this.using) )
 			this.using[ name ] = font;
-		
-		
+
+
 		let output = 'BT'+ CRLF;
 			output += '/'+ font.getObjectName() + SP + precision( size ) + SP +'Tf'+ CRLF;
 			output += precision( x ) + SP + precision( y ) + SP +'Td'+ CRLF;
-			
+
 		for( let key in options )
-			output += options[ key ] + SP + key + CRLF;	
-		
+			output += options[ key ] + SP + key + CRLF;
+
 		///
 		if( typeof content == 'string' ) {
-			
+
 			content = '('+ content +')';
-			
+
 		} else {
-			
+
 			content = '<'+ Array.from(content).map(e=>e.toString(16).padStart(2, '0')).join('') +'>';
-			
+
 		}
-		
+
 		this.push( output + content + SP +'Tj'+ CRLF +'ET');
-		
+
 		return this;
-		
+
 	}
-	
+
 	/** strokeText
 	 *
 	 *	@param {String} content
@@ -508,41 +509,41 @@ export default class Path2D extends Array {
 	 *	@return {Path2D} this
 	 */
 	strokeText( content, x, y, size, font, options = null ) {
-		
+
 		let name = font.getObjectName();
-		
-		if( !(name in this.using) ) 
+
+		if( !(name in this.using) )
 			this.using[ name ] = font;
-		
-		if( !options.hasOwnProperty('Tr') ) 
+
+		if( !options.hasOwnProperty('Tr') )
 			options.Tr = 1;
-		
+
 		let output = 'BT'+ CRLF;
 			output += '/'+ font.getObjectName() + SP + precision( size ) + SP +'Tf'+ CRLF;
 			output += precision( x ) + SP + precision( y ) + SP +'Td'+ CRLF;
-			
+
 		for( let key in options )
-			output += options[ key ] + SP + key + CRLF;	
-		
+			output += options[ key ] + SP + key + CRLF;
+
 		///
 		if( typeof content == 'string' ) {
-			
+
 			content = '('+ content +')';
-			
+
 		} else {
-			
+
 			content = '<'+ Array.from(content).map(e=>e.toString(16).padStart(2, '0')).join('') +'>';
-			
+
 		}
-		
+
 		this.push( output + content + SP +'Tj'+ CRLF +'ET');
-		
+
 		return this;
 
 	}
-	
+
 	///
-	
+
 	/** drawImage
 	 *
 	 *  @param {PDFImage} object
@@ -554,17 +555,17 @@ export default class Path2D extends Array {
 		this.push( 'q' );
 
 		this.translate( x, y );
-		
-		if( r != 0 ) 
+
+		if( r != 0 )
 			this.rotate( r );
-		
+
 		this.scale( w, h );
-		
+
 		let name = object.getObjectName();
-		
-		if( !(name in this.using) ) 
+
+		if( !(name in this.using) )
 			this.using[ name ] = object;
-		
+
 		this.push( '/'+ name + SP +'Do' );
 		this.push( 'Q' );
 
@@ -573,14 +574,14 @@ export default class Path2D extends Array {
 	}
 
 	toString() {
-		
+
 		let output = '';
-		
-		for( let line of this ) 
+
+		for( let line of this )
 			output += line + CRLF;
-		
+
 		return output;
-		
+
 	}
-	
+
 }
