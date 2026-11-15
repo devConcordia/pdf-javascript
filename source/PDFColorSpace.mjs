@@ -1,5 +1,5 @@
 
-import PDFArray from "./PDFArray.mjs";
+import PDFArray from "./core/PDFArray.mjs";
 
 /** PDFColorSpace
  *
