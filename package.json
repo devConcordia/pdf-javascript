@@ -1,0 +1,21 @@
+{
+  "name": "pdf-javascript",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/devConcordia/pdf-javascript#readme",
+  "bugs": {
+    "url": "https://github.com/devConcordia/pdf-javascript/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devConcordia/pdf-javascript.git"
+  },
+  "license": "CC0-1.0",
+  "author": "devConcordia",
+  "type": "module",
+  "main": "./source/index.mjs",
+  "module": "./source/index.mjs",
+  "directories": {
+    "doc": "docs"
+  }
+}
